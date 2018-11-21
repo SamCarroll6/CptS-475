@@ -51,5 +51,9 @@ barplot(table(T20143$academic_level), main = "20143")
 barplot(table(T20151$academic_level), main = "20151")
 barplot(table(T20153$academic_level), main = "20153")
 
-# Match time periods that occur during 05:00-05:59
+# Count time periods that occur during 05:00-05:59
 sum(grepl('^05:', T20123$TIME))
+# Creates a new dataframe out of only people who go between 5:00-5:59
+PM520123 = subset(T20123, grepl('^05:', TIME))
+
+#PM520123 <- grepl('^05:', T20123$TIME) 
