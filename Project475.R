@@ -18,7 +18,7 @@ Fall2012 = new[[1]] ## Fall 2012 [2012-08-17 to 2013-01-06]
 Spring2013 = new[[2]] ## Spring 2013 [2013-01-07 to 2013-05-05] 
 Summer2013 = new[[3]] ## Summer 2013 [2013-05-06 to 2013-08-08]
 Fall2013 = new[[4]] ## Fall 2013 [2013-08-09 to 2014-01-12] 
-Spring2014 = new[[5]] ## Spring 2014 [2014-01-13 to 2014-05-11] 
+Spring2014 = new[[5]] ## Spring 2014 [2 014-01-13 to 2014-05-11] 
 Summer2014 = new[[6]] ## Summer 2014 [2014-05-12 to 2014-08-14] 
 Fall2014 = new[[7]] ## Fall 2014 [2014-08-15 to 2015-01-11] 
 Spring2015 = new[[8]] ## Spring 2015 [2015-01-12 to 2015-05-10] 
@@ -26,43 +26,6 @@ Summer2015 = new[[9]] ## Summer 2015 [2015-05-11 to 2015-08-13]
 Fall2015 = new[[10]] ## Fall 2015 [INCOMPLETE. ONLY 3 DAYS]
 
 
-
-sumation <- length(Fall2012$TRANDATE) + length(Spring2013$TRANDATE) + length(Fall2013$TRANDATE) + length(Spring2014$TRANDATE) +
-  length(Fall2014$TRANDATE) + length(Spring2015$TRANDATE) + length(Fall2015$TRANDATE) + length(Summer2013$TRANDATE) +
-  length(Summer2014$TRANDATE) + length(Summer2015$TRANDATE)
-
-### Academic Year 2012-2013
-Fall2012_Unique_Swipes <- as.data.frame(table(Fall2012$PATRONID.x))
-Fall2012_Freq_Count <- as.data.frame(Fall2012_Unique_Swipes[order(-Fall2012_Unique_Swipes$Freq), ])
-names(Fall2012_Freq_Count)[1] <- "PATRONID" #Change column name
-Spring2013_Unique_Swipes <- as.data.frame(table(Spring2013$PATRONID.x))
-Spring2013_Freq_Count <- as.data.frame(Spring2013_Unique_Swipes[order(-Spring2013_Unique_Swipes$Freq), ])
-names(Spring2013_Freq_Count)[1] <- "PATRONID" #Change column name
-Summer2013_Unique_Swipes <- as.data.frame((table(Summer2013$PATRONID.x)))
-Summer2013_Freq_Count <- as.data.frame(Summer2013_Unique_Swipes[order(-Summer2013_Unique_Swipes$Freq), ])
-names(Summer2013_Freq_Count)[1] <- "PATRONID" #Change column name
-
-### Academic Year 2013-2014
-Fall2013_Unique_Swipes <- as.data.frame(table(Fall2013$PATRONID.x))
-Fall2013_Freq_Count <- as.data.frame(Fall2013_Unique_Swipes[order(-Fall2013_Unique_Swipes$Freq), ])
-names(Fall2013_Freq_Count)[1] <- "PATRONID" #Change column name
-Spring2014_Unique_Swipes <- as.data.frame(table(Spring2014$PATRONID.x))
-Spring2014_Freq_Count <- as.data.frame(Spring2014_Unique_Swipes[order(-Spring2014_Unique_Swipes$Freq), ])
-names(Spring2014_Freq_Count)[1] <- "PATRONID" #Change column name
-Summer2014_Unique_Swipes <- as.data.frame((table(Summer2014$PATRONID.x)))
-Summer2014_Freq_Count <- as.data.frame(Summer2014_Unique_Swipes[order(-Summer2014_Unique_Swipes$Freq), ])
-names(Summer2014_Freq_Count)[1] <- "PATRONID" #Change column name
-
-### Academic Year 2014-2015
-Fall2014_Unique_Swipes <- as.data.frame(table(Fall2014$PATRONID.x))
-Fall2014_Freq_Count <- as.data.frame(Fall2014_Unique_Swipes[order(-Fall2014_Unique_Swipes$Freq), ])
-names(Fall2014_Freq_Count)[1] <- "PATRONID" #Change column name
-Spring2015_Unique_Swipes <- as.data.frame(table(Spring2015$PATRONID.x))
-Spring2015_Freq_Count <- as.data.frame(Spring2015_Unique_Swipes[order(-Spring2015_Unique_Swipes$Freq), ])
-names(Spring2015_Freq_Count)[1] <- "PATRONID" #Change column name
-Summer2015_Unique_Swipes <- as.data.frame((table(Summer2015$PATRONID.x)))
-Summer2015_Freq_Count <- as.data.frame(Summer2015_Unique_Swipes[order(-Summer2015_Unique_Swipes$Freq), ])
-names(Summer2015_Freq_Count)[1] <- "PATRONID" #Change column name
 
 
 # Plot the times on a graph. X axis has the date visited (8/16 to 1/6). Y axis has the time of day (515 to 2330)
@@ -87,7 +50,7 @@ Spring2015ALfreq = by(Spring2015, Spring2015[,"academic_level"], function(x) x)
 
 Fall2014_Plot = as.data.frame(table(Fall2014$academic_level))
 Spring2015_Plot = as.data.frame(table(Spring2015$academic_level))
-
+t
 
 # Fall2012_Plot$Year = 2012
 Fall2012_Plot$semester = "Fall"
@@ -115,14 +78,15 @@ SpringCumulative <- aggregate(Freq ~ Var1, data=SpringCumulative, sum)
 FallCumulative$semester <- "Fall"
 SpringCumulative$semester <- "Spring"
 
+# Combne Fall and Spring datasets
 CumulativeALevel <- rbind(FallCumulative, SpringCumulative)
 
-colorPalette = c("red","blue","green","yellow","black","purple","hotpink","brown")
-colorPalette = c("deepskyblue2", "deepskyblue3", "deepskyblue4", "dimgrey", "black", "dodgerblue1", "dodgerblue3", "dodgerblue4")
-ggplot(data=CumulativeALevel, aes(x=semester, y=Freq, fill=Var1)) + geom_bar(stat="identity", position=position_dodge()) + scale_color_manual(values=colorPalette) + scale_fill_manual(values=colorPalette)
+# Remove non undergrads
+CumulativeALevel <- CumulativeALevel[-c(2,4,5,6,10,12,13,14),]
 
-
-
+# Set Colors and make plot of results by semester
+colorPalette = c("#d73027", "#f46d43", "#fdae61", "#fee090", "#ffffbf", "#abd9e9", "#74add1", "#4575b4")
+ggplot(data=CumulativeALevel, aes(x=semester, y=Freq, fill=Var1)) + ggtitle("Frequency of academic level visits to SRC by semester") + geom_bar(stat="identity", position=position_dodge()) + scale_color_manual(values=colorPalette) + scale_fill_manual(values=colorPalette)
 
 #Use as.character(student_date[150,])
 
