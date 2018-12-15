@@ -260,7 +260,7 @@ ggplot(data=Simpleres, aes(x=Var1, y=Freq, fill=Var1)) + ggtitle("Academic Level
 SxH <- as.data.frame(table(DemoGraphics$sex, DemoGraphics$Hour))
 
 FemSxH <- subset(SxH, Var1 == "F")
-MalSxH <- subset(SxH, Var1 == "M")
+MalSxH <- subset(SxH, Var1 == "M")t
 
 cor(as.numeric(FemSxH$Var2), FemSxH$Freq, method = "pearson")
 cor.test(as.numeric(FemSxH$Var2), FemSxH$Freq, method = "pearson")
