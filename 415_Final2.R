@@ -1,6 +1,7 @@
 library(tidyr)
 library(dplyr)
 library(ggplot2)
+library(ggpubr)
 
 DemoGraphics <- as.data.frame(read.csv("~/Desktop/DS_ClassProject_Fall2018_data/Demographics.csv"))
 
@@ -166,24 +167,6 @@ table(DemoGraphics$Hour)
 
 Timebreak <- by(DemoGraphics, DemoGraphics[,"Hour"], function(x) x)
 
-hold <- Timebreak[[1]]
-hold2 <- as.data.frame(table(hold$acad_plan_descr))
-hold2$Hour <- 4
-CumulativeALevel <- hold2
-for(i in 2:20)
-{
-  hold <- Timebreak[[i]]
-  hold2 <- as.data.frame(table(hold$acad_plan_descr))
-  hold2$Hour <- i + 3
-  CumulativeALevel <- rbind(CumulativeALevel, hold2)
-}
-
-CumulativeALevel <- subset(CumulativeALevel, Var1 %in% thing$Var1)
-
-# Set Colors and make plot of results by semester
-colorPalette = c("#d73027", "#f46d43", "#fdae61", "#fee090", "#ffffbf", "#abd9e9", "#74add1", "#4575b4")
-ggplot(data=CumulativeALevel, aes(x=Hour, y=Freq, fill=Var1)) + ggtitle("Frequency X Hour/Major High") + geom_bar(stat="identity", position=position_dodge()) + scale_color_manual(values=colorPalette) + scale_fill_manual(values=colorPalette)
-
 ##################### Low ########################
 
 hold <- Timebreak[[1]]
@@ -241,6 +224,28 @@ for(i in 2:20)
 
 CumulativeALevel <- subset(CumulativeALevel, Var1 %in% thing3$Var1)
 
+############## HIGH ####################
+
+hold <- Timebreak[[1]]
+hold2 <- as.data.frame(table(hold$acad_plan_descr))
+hold2$Hour <- 4
+CumulativeALevel <- hold2
+for(i in 2:20)
+{
+  hold <- Timebreak[[i]]
+  hold2 <- as.data.frame(table(hold$acad_plan_descr))
+  hold2$Hour <- i + 3
+  CumulativeALevel <- rbind(CumulativeALevel, hold2)
+}
+
+CumulativeALevel <- subset(CumulativeALevel, Var1 %in% thing$Var1)
+
+# Set Colors and make plot of results by semester
+colorPalette = c("#d73027", "#f46d43", "#fdae61", "#fee090", "#ffffbf", "#abd9e9", "#74add1", "#4575b4")
+ggplot(data=CumulativeALevel, aes(x=Hour, y=Freq, fill=Var1)) + ggtitle("Frequency X Hour/Major High") + geom_bar(stat="identity", position=position_dodge()) + scale_color_manual(values=colorPalette) + scale_fill_manual(values=colorPalette)
+
+############################################
+
 # Set Colors and make plot of results by semester
 colorPalette = c("#d73027", "#f46d43", "#fdae61", "#fee090", "#ffffbf", "#abd9e9", "#74add1", "#4575b4")
 ggplot(data=CumulativeALevel, aes(x=Hour, y=Freq, fill=Var1)) + ggtitle("Frequency X Hour/Major Medium High") + geom_bar(stat="identity", position=position_dodge()) + scale_color_manual(values=colorPalette) + scale_fill_manual(values=colorPalette)
@@ -251,4 +256,17 @@ Simpleres <- Simpleres[-c(2,4,5,6),]
 colorPalette = c("#d73027", "#f46d43", "#fdae61", "#fee090", "#ffffbf", "#abd9e9", "#74add1", "#4575b4")
 ggplot(data=Simpleres, aes(x=Var1, y=Freq, fill=Var1)) + ggtitle("Academic Level X Frequency of SRC visits") + geom_bar(stat="identity", position=position_dodge()) + scale_color_manual(values=colorPalette) + scale_fill_manual(values=colorPalette)
 
-barplot(DemoGraphics$Hour)
+
+SxH <- as.data.frame(table(DemoGraphics$sex, DemoGraphics$Hour))
+
+FemSxH <- subset(SxH, Var1 == "F")
+MalSxH <- subset(SxH, Var1 == "M")
+
+cor(as.numeric(FemSxH$Var2), FemSxH$Freq, method = "pearson")
+cor.test(as.numeric(FemSxH$Var2), FemSxH$Freq, method = "pearson")
+
+cor(as.numeric(MalSxH$Var2), MalSxH$Freq, method = "pearson")
+cor.test(as.numeric(MalSxH$Var2), MalSxH$Freq, method = "pearson")
+
+length(DemoGraphics$Hour)
+length(DemoGraphics$sex)
